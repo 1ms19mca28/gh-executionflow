@@ -79,9 +79,10 @@ jobs:
     needs: [lint, deploy]
     if: failure()
     runs-on: ubuntu-latest
-    - name: reporting
-        run: |
-          echo "Something went wrong"
-          echo "${{ github }}"
+    steps:
+      - name: reporting
+          run: |
+            echo "Something went wrong"
+            echo "${{ github }}"
     
 
