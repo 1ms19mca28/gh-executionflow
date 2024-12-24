@@ -6,47 +6,17 @@ jobs:
       matrix:
         node-version: [12,14,16]
         operating-system: [ubuntu-latest, windows-latest]
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.operating-system }}
     steps:
       - name: Get code
         uses: actions/checkout@v3
-      - name: Cache dependencies
-        id: cache
-        uses: actions/cache@v3
+      - name: Install NodeJS
+        uses: actions/setup-node@v3
         with:
-          path: node_modules
-          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+          node-version: ${{ matrix.node-version }}
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
-      - name: Build website
-        id: build-website
+      - name: Build project
         run: npm run build
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: dist-files
-          path: dist
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get build artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: dist-files
-      - name: Output contents
-        run: ls
-      - name: Deploy
-        run: echo "Deploying..."
-  report:
-    needs: [lint, deploy]
-    if: failure()
-    runs-on: ubuntu-latest
-    steps:
-      - name: reporting
-        run: |
-          echo "Something went wrong"
-          echo "${{ github }}"
-    
+
 
