@@ -1,14 +1,11 @@
-name: Continue Website Deployment
-on:
-  push:
-    branches:
-      - main
+name: Matrix Demo
+on: push
 jobs:
   build:
-  strategy:
-    matrix:
-      node-version: [12,14,16]
-      operating-system: [ubuntu-latest, windows-latest]
+    strategy:
+      matrix:
+        node-version: [12,14,16]
+        operating-system: [ubuntu-latest, windows-latest]
     runs-on: ubuntu-latest
     steps:
       - name: Get code
